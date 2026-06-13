@@ -1,0 +1,77 @@
+<div style="max-width: 600px; margin: 0 auto;" class="no-print">
+  <%= link_to "← Back to Dashboard", dashboard_path, style: "color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;" %>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; margin-bottom: 2rem;">
+    <h1 style="font-family: var(--font-display); font-size: 2rem; font-weight: 700;">Print Dog Tag Permit</h1>
+    <button onclick="window.print()" class="btn btn-primary">
+      <span>🖨️</span> Print Permit
+    </button>
+  </div>
+</div>
+
+<div class="permit-card-container">
+  <div class="dog-tag-card">
+    <div class="tag-header">
+      <div class="tag-header-left">
+        <h2>CITY PLANNING DEPT</h2>
+        <p>Official Dog License & Permit</p>
+      </div>
+      <div class="tag-badge">
+        ACTIVE
+      </div>
+    </div>
+
+    <div class="tag-body">
+      <div class="tag-field" style="grid-column: span 2;">
+        <span class="tag-label">License Tag Number</span>
+        <span class="tag-value-lg"><%= @permit_request.tag_number %></span>
+      </div>
+
+      <div class="tag-field">
+        <span class="tag-label">Dog Name</span>
+        <span class="tag-value"><%= @permit_request.dog_name %></span>
+      </div>
+
+      <div class="tag-field">
+        <span class="tag-label">Breed</span>
+        <span class="tag-value"><%= @permit_request.breed %></span>
+      </div>
+
+      <div class="tag-field">
+        <span class="tag-label">Dog Age</span>
+        <span class="tag-value"><%= pluralize(@permit_request.age, 'year') %></span>
+      </div>
+
+      <div class="tag-field">
+        <span class="tag-label">Issue Date</span>
+        <span class="tag-value"><%= @permit_request.updated_at.strftime("%B %d, %Y") %></span>
+      </div>
+
+      <div class="tag-field" style="grid-column: span 2; margin-top: 0.5rem; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 0.75rem;">
+        <span class="tag-label">Registered Owner</span>
+        <span class="tag-value" style="font-size: 1.2rem; color: #f8fafc;"><%= @permit_request.owner_name %></span>
+        <span style="font-size: 0.8rem; color: var(--text-secondary);"><%= @permit_request.owner_phone %></span>
+      </div>
+    </div>
+
+    <div class="tag-footer">
+      <div>Authorized by Municipal Authority</div>
+      <div class="tag-seal">
+        <span>🎖️</span> CERTIFIED
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="print-instructions no-print">
+  <p>Click the <strong>Print Permit</strong> button above to open the system print dialog.</p>
+  <p style="font-size: 0.85rem; margin-top: 0.5rem;">For best results, disable headers and footers in your browser print settings.</p>
+</div>
+
+<style>
+/* inline adjustment helper for layouts that don't need print elements */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+</style>

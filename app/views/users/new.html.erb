@@ -1,0 +1,49 @@
+<div class="auth-wrapper">
+  <div class="card">
+    <div class="auth-header">
+      <h1>Register Account</h1>
+      <p>Apply and print dog tag permits online</p>
+    </div>
+
+    <%= form_with model: @user, url: signup_path, local: true, class: "auth-form" do |f| %>
+      <% if @user.errors.any? %>
+        <div class="flash flash-alert" style="margin-bottom: 1.5rem; flex-direction: column; align-items: flex-start;">
+          <strong>Please fix the errors below:</strong>
+          <ul style="margin-left: 1.25rem; margin-top: 0.5rem; font-size: 0.85rem;">
+            <% @user.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= f.label :name, "Full Name" %>
+        <%= f.text_field :name, class: "form-control", placeholder: "John Doe", required: true, autofocus: true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :email, "Email Address" %>
+        <%= f.email_field :email, class: "form-control", placeholder: "john@example.com", required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password, "Password" %>
+        <%= f.password_field :password, class: "form-control", placeholder: "••••••••", required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password_confirmation, "Confirm Password" %>
+        <%= f.password_field :password_confirmation, class: "form-control", placeholder: "••••••••", required: true %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "Create Account", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+
+    <div class="form-footer">
+      Already have an account? <%= link_to "Log in here", login_path %>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+<div class="dashboard-header">
+  <div>
+    <h1>My Permit Dashboard</h1>
+    <p style="color: var(--text-secondary); margin-top: 0.25rem;">Apply for, track, and print your active dog tag permits</p>
+  </div>
+  <%= link_to "Apply for Permit", new_permit_request_path, class: "btn btn-primary" %>
+</div>
+
+<div class="card" style="padding: 1.5rem;">
+  <h2 class="card-title" style="font-size: 1.4rem; margin-bottom: 1.25rem;">Submitted Applications</h2>
+
+  <% if @permit_requests.any? %>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Dog Name</th>
+            <th>Breed</th>
+            <th>Age</th>
+            <th>Owner Info</th>
+            <th>Status</th>
+            <th>Tag Number</th>
+            <th style="text-align: right;">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @permit_requests.each do |request| %>
+            <tr>
+              <td><strong><%= request.dog_name %></strong></td>
+              <td><%= request.breed %></td>
+              <td><%= pluralize(request.age, 'year') %></td>
+              <td>
+                <div style="font-size: 0.9rem;"><%= request.owner_name %></div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);"><%= request.owner_phone %></div>
+              </td>
+              <td>
+                <span class="status-badge status-<%= request.status %>">
+                  <%= request.status %>
+                </span>
+              </td>
+              <td>
+                <% if request.tag_number.present? %>
+                  <code style="font-size: 0.9rem; color: #a5b4fc;"><%= request.tag_number %></code>
+                <% else %>
+                  <span style="color: var(--text-muted); font-style: italic;">Not issued</span>
+                <% end %>
+              </td>
+              <td style="text-align: right;">
+                <% if request.status == "approved" %>
+                  <%= link_to "Print Tag", permit_request_path(request), class: "btn btn-success btn-sm" %>
+                <% else %>
+                  <button class="btn btn-secondary btn-sm" disabled style="opacity: 0.5; cursor: not-allowed;">Print Tag</button>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="empty-state">
+      <h3>No permits found</h3>
+      <p>You haven't requested any dog tag permits yet.</p>
+      <%= link_to "Apply for a Permit", new_permit_request_path, class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

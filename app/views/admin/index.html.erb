@@ -1,0 +1,110 @@
+<div class="dashboard-header">
+  <div>
+    <h1>Admin Panel - Dog Tag Permits</h1>
+    <p style="color: var(--text-secondary); margin-top: 0.25rem;">Review municipal dog licensing requests, approve or reject applications</p>
+  </div>
+</div>
+
+<!-- Pending Requests -->
+<div class="card" style="padding: 1.5rem; margin-bottom: 2.5rem;">
+  <h2 class="card-title" style="font-size: 1.4rem; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.5rem;">
+    <span>📥</span> Pending Review 
+    <span class="badge badge-admin" style="font-size: 0.8rem; padding: 0.15rem 0.5rem;"><%= @pending_requests.size %></span>
+  </h2>
+
+  <% if @pending_requests.any? %>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Applicant Name</th>
+            <th>Dog's Name (Check carefully)</th>
+            <th>Breed</th>
+            <th>Age</th>
+            <th>Owner Info</th>
+            <th>Submitted At</th>
+            <th style="text-align: right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @pending_requests.each do |request| %>
+            <tr>
+              <td><%= request.user.name %> (<%= request.user.email %>)</td>
+              <td><strong style="color: #a5b4fc; font-size: 1.1rem;"><%= request.dog_name %></strong></td>
+              <td><%= request.breed %></td>
+              <td><%= pluralize(request.age, 'year') %></td>
+              <td>
+                <div><%= request.owner_name %></div>
+                <div style="font-size: 0.8rem; color: var(--text-secondary);"><%= request.owner_phone %></div>
+              </td>
+              <td style="font-size: 0.85rem; color: var(--text-secondary);">
+                <%= request.created_at.strftime("%b %d, %Y at %I:%M %p") %>
+              </td>
+              <td style="text-align: right;">
+                <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
+                  <%= button_to "Approve", approve_permit_request_path(request), method: :post, class: "btn btn-success btn-sm" %>
+                  <%= button_to "Reject", reject_permit_request_path(request), method: :post, class: "btn btn-danger btn-sm" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="empty-state" style="padding: 3rem 2rem;">
+      <h3>All caught up!</h3>
+      <p style="margin-bottom: 0;">There are currently no pending permit requests to review.</p>
+    </div>
+  <% end %>
+</div>
+
+<!-- History / Processed Requests -->
+<div class="card" style="padding: 1.5rem;">
+  <h2 class="card-title" style="font-size: 1.4rem; margin-bottom: 1.25rem;">Processed History</h2>
+
+  <% if @processed_requests.any? %>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Applicant</th>
+            <th>Dog Name</th>
+            <th>Breed</th>
+            <th>Status</th>
+            <th>Tag Number</th>
+            <th>Processed Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @processed_requests.each do |request| %>
+            <tr>
+              <td><%= request.user.name %></td>
+              <td><strong><%= request.dog_name %></strong></td>
+              <td><%= request.breed %></td>
+              <td>
+                <span class="status-badge status-<%= request.status %>">
+                  <%= request.status %>
+                </span>
+              </td>
+              <td>
+                <% if request.tag_number.present? %>
+                  <code style="font-size: 0.9rem; color: #a5b4fc;"><%= request.tag_number %></code>
+                <% else %>
+                  <span style="color: var(--text-muted); font-style: italic;">N/A</span>
+                <% end %>
+              </td>
+              <td style="font-size: 0.85rem; color: var(--text-secondary);">
+                <%= request.updated_at.strftime("%b %d, %Y") %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div style="text-align: center; padding: 2rem; color: var(--text-muted); font-style: italic;">
+      No history of processed permits.
+    </div>
+  <% end %>
+</div>

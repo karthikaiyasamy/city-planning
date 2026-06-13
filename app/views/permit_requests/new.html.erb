@@ -1,0 +1,58 @@
+<div style="max-width: 650px; margin: 0 auto;">
+  <div style="margin-bottom: 2rem;">
+    <%= link_to "← Back to Dashboard", dashboard_path, style: "color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;" %>
+    <h1 style="font-family: var(--font-display); font-size: 2.2rem; font-weight: 700; margin-top: 0.5rem;">New Dog Tag Application</h1>
+    <p style="color: var(--text-secondary);">Fill in the details below to request an official city dog permit.</p>
+  </div>
+
+  <div class="card">
+    <%= form_with model: @permit_request, local: true do |f| %>
+      <% if @permit_request.errors.any? %>
+        <div class="flash flash-alert" style="margin-bottom: 1.5rem; flex-direction: column; align-items: flex-start;">
+          <strong>Please fix the errors below:</strong>
+          <ul style="margin-left: 1.25rem; margin-top: 0.5rem; font-size: 0.85rem;">
+            <% @permit_request.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <h3 style="font-family: var(--font-display); font-size: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-bottom: 1.5rem; color: #a5b4fc;">1. Dog Details</h3>
+
+      <div class="form-group">
+        <%= f.label :dog_name, "Dog's Name" %>
+        <%= f.text_field :dog_name, class: "form-control", placeholder: "e.g., Max", required: true %>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+        <div class="form-group">
+          <%= f.label :breed, "Breed" %>
+          <%= f.text_field :breed, class: "form-control", placeholder: "e.g., Golden Retriever", required: true %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :age, "Age (in Years)" %>
+          <%= f.number_field :age, class: "form-control", placeholder: "e.g., 3", required: true, min: 0 %>
+        </div>
+      </div>
+
+      <h3 style="font-family: var(--font-display); font-size: 1.25rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem; margin-top: 2rem; margin-bottom: 1.5rem; color: #a5b4fc;">2. Owner Details</h3>
+
+      <div class="form-group">
+        <%= f.label :owner_name, "Registered Owner's Full Name" %>
+        <%= f.text_field :owner_name, class: "form-control", placeholder: "e.g., Jane Doe", required: true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :owner_phone, "Owner's Contact Phone" %>
+        <%= f.telephone_field :owner_phone, class: "form-control", placeholder: "e.g., 555-0199", required: true %>
+      </div>
+
+      <div style="display: flex; gap: 1rem; margin-top: 2.5rem; justify-content: flex-end;">
+        <%= link_to "Cancel", dashboard_path, class: "btn btn-secondary" %>
+        <%= f.submit "Submit Application", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

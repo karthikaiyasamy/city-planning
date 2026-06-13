@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "City Planning Dog Tag Permits" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="City Planning">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <header>
+      <div class="navbar">
+        <a href="<%= root_path %>" class="brand">
+          <span>🏷️</span> City Planning
+        </a>
+        <div class="nav-links">
+          <% if logged_in? %>
+            <div class="nav-user">
+              Signed in as <strong><%= current_user.name %></strong>
+              <% if current_user.admin? %>
+                <span class="badge badge-admin">Admin</span>
+              <% else %>
+                <span class="badge badge-user">Resident</span>
+              <% end %>
+            </div>
+            <% if current_user.admin? %>
+              <a href="<%= admin_dashboard_path %>" class="btn btn-secondary btn-sm">Admin Panel</a>
+            <% else %>
+              <a href="<%= dashboard_path %>" class="btn btn-secondary btn-sm">Dashboard</a>
+            <% end %>
+            <%= button_to "Log Out", logout_path, method: :delete, class: "btn btn-danger btn-sm" %>
+          <% else %>
+            <a href="<%= login_path %>" class="btn btn-secondary btn-sm">Log In</a>
+            <a href="<%= signup_path %>" class="btn btn-primary btn-sm">Sign Up</a>
+          <% end %>
+        </div>
+      </div>
+    </header>
+
+    <% if flash[:notice].present? || flash[:alert].present? %>
+      <div class="flash-container">
+        <% if flash[:notice].present? %>
+          <div class="flash flash-notice">
+            <span>✨</span> <%= flash[:notice] %>
+          </div>
+        <% end %>
+        <% if flash[:alert].present? %>
+          <div class="flash flash-alert">
+            <span>⚠️</span> <%= flash[:alert] %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+
+    <main>
+      <%= yield %>
+    </main>
+  </body>
+</html>
